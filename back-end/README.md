@@ -76,6 +76,33 @@ PUT `/contact/{id}` com mesma estrutura de payload. Telefones são substituídos
 
 GET `/contact` ou `/contact/{id}` retorna `phones` como array de strings.
 
+### Buscar Contatos
+
+POST `/contact/search`
+
+Payload:
+```json
+{
+  "query": "termo a buscar"
+}
+```
+
+Busca parcial por nome ou e-mail (case-insensitive). Retorna array de contatos encontrados.
+
+Resposta:
+```json
+[
+  {
+    "contactId": 1,
+    "name": "contato teste",
+    "email": "test@gmail.com",
+    "phones": ["+55 11 99999-0000"],
+    "dateCreated": "2025-11-20 12:00:00",
+    "dateUpdated": "2025-11-20 12:00:00"
+  },
+]
+```
+
 ### Migração
 
 Executar script em `migration/20210514-contact.sql` após ter a tabela `contact` criada.

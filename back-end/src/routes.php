@@ -25,6 +25,13 @@ $app->post('/contact', function (Request $request, Response $response, array $ar
     return $service->post($data);
 });
 
+$app->post('/contact/search', function (Request $request, Response $response, array $args)
+{
+    $service = $this->get('ContactService');
+    $data = $request->getParsedBody();
+    return $service->search($data);
+});
+
 $app->put('/contact/{id}', function (Request $request, Response $response, array $args) 
 {
     $service = $this->get('ContactService');

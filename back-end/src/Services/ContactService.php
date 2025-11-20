@@ -7,6 +7,22 @@ use Api\Models\{Contact, ContactPhone};
 
 class ContactService extends BaseService
 {
+    public function search($data)
+    {
+        $term = trim($data['query'] ?? '');
+
+        return $this->ok(
+            Contact::with('phones')
+                ->when($term !== '', function ($query) use ($term) {
+                    $query->where('name', 'LIKE', "%{$term}%")
+                        ->orWhere('email', 'LIKE', "%{$term}%");
+                })
+                ->get()
+                ->each(fn($c) => $this->formatContactPhones($c))
+                ->toArray()
+        );
+    }
+        
     private function formatContactPhones($contact)
     {
         if ($contact) {

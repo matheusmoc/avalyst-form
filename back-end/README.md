@@ -27,3 +27,56 @@
   - settings.php *(configuração do banco de dados)*
 
 - migration *(scripts de criação de tabelas)*
+
+## Telefones do Contato (Atualização)
+
+Agora um contato pode possuir múltiplos telefones.
+
+### Estrutura
+
+- Nova tabela: `contact_phone` (`contactPhoneId`, `contactId`, `phone`)
+- Relacionamento: `Contact` hasMany `ContactPhone` via `contactId`
+
+### Criar Contato
+
+POST `/contact`
+
+Payload (múltiplos telefones):
+
+```json
+{
+  "name": "contato teste",
+  "email": "test@gmail.com",
+  "phones": ["+55 11 99999-0000", "+55 11 98888-1111"]
+}
+```
+
+
+### Resposta
+
+```json
+{
+  "ok": true,
+  "data": {
+    "contactId": 1,
+    "name": "contato teste",
+    "email": "test@gmail.com",
+    "phones": ["+55 11 99999-0000", "+55 11 98888-1111"],
+    "dateCreated": "2025-11-20 12:00:00",
+    "dateUpdated": "2025-11-20 12:00:00"
+  }
+}
+```
+
+### Atualizar Contato
+
+PUT `/contact/{id}` com mesma estrutura de payload. Telefones são substituídos pelo novo array enviado.
+
+### Listar Contatos / Detalhe
+
+GET `/contact` ou `/contact/{id}` retorna `phones` como array de strings.
+
+### Migração
+
+Executar script em `migration/20210514-contact.sql` após ter a tabela `contact` criada.
+

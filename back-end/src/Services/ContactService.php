@@ -3,65 +3,81 @@
 namespace Api\Services;
 
 use Api\Validators\ContactValidator;
-use Api\Models\Contact;
+use Api\Models\{Contact, ContactPhone};
 
 class ContactService extends BaseService
 {
+    private function formatContactPhones($contact)
+    {
+        if ($contact) {
+            $contact->phones = $contact->phones->pluck('phone');
+        }
+        return $contact;
+    }
+
     public function get($id)
     {
-        if (empty($id))
-        {
-            $data = Contact::all()->toArray();
-        }
-        else
-        {
-            $data = Contact::find($id)->toArray();
+        $contact = Contact::with('phones')->find($id);
+
+        if (!$contact) {
+            return $this->error('Not found', 404);
         }
 
-        return $this->ok($data);
+        return $this->ok($this->formatContactPhones($contact)->toArray());
     }
 
     public function post($data)
     {
         $validator = new ContactValidator();
-
-        if ($validator->validate($data) === false)
-        {
-            return $this->error($validator->errors, 200);
+        if (!$validator->validate($data)) {
+            return $this->error($validator->errors, 422);
         }
 
-        $contact = Contact::create([            
-            'name' => trim($data['name']),
+        $contact = Contact::create([
+            'name'  => trim($data['name']),
             'email' => trim($data['email']),
         ]);
 
-        return $this->ok($contact->toArray());
+        $phones = collect($data['phones'] ?? [])->filter();
+
+        foreach ($phones as $phone) {
+            ContactPhone::create([
+                'contactId' => $contact->contactId,
+                'phone'     => $phone
+            ]);
+        }
+
+        return $this->ok($contact->load('phones')->toArray());
     }
 
     public function put($id, $data)
     {
         $validator = new ContactValidator();
-
-        if ($validator->validate($data) === false)
-        {
-            return $this->error($validator->errors, 200);
+        if (!$validator->validate($data)) {
+            return $this->error($validator->errors, 422);
         }
 
         $contact = Contact::find($id);
-
-        if (!$contact)
-        {
+        if (!$contact) {
             return $this->error('Not found', 404);
         }
 
-        $contact->fill([
-            'name' => trim($data['name']),
+        $contact->update([
+            'name'  => trim($data['name']),
             'email' => trim($data['email']),
         ]);
 
-        $contact->save();
+        ContactPhone::where('contactId', $id)->delete();
 
-        return $this->ok($contact->toArray());
+        $phones = collect($data['phones'] ?? [])->filter();
+
+        foreach ($phones as $phone) {
+            ContactPhone::create([
+                'contactId' => $id,
+                'phone'     => $phone
+            ]);
+        }
+
+        return $this->ok($contact->load('phones')->toArray());
     }
 }
-

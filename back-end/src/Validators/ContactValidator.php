@@ -11,6 +11,11 @@ final class ContactValidator extends SelfValidation
         $rules = [
             'name' => v::notEmpty()->length(0,100)->setName('Nome'),
             'email' => v::email()->notEmpty()->length(0,100)->setName('E-mail'),
+            'phones' => v::optional(
+                v::arrayType()->each(
+                    v::stringType()->length(0,30)
+                )
+            )->setName('Telefones')
         ];
 
         return $this->validateData($data, $rules);

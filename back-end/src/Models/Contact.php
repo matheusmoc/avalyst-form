@@ -9,6 +9,16 @@ final class Contact extends BaseModel
 
     protected $fillable = [
         'name', 
-        'email'
+        'email',
+        'phones'
     ];
+
+    protected $casts = [
+        'phones' => 'array'
+    ];
+
+    public function phones()
+    {
+        return $this->hasMany(ContactPhone::class, 'contactId', 'contactId');
+    }
 }

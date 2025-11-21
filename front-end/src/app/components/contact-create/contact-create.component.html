@@ -52,7 +52,13 @@
       <label>Telefones:</label>
       <div formArrayName="phones">
         <div *ngFor="let phone of phones.controls; let i = index" class="form-group d-flex mb-2">
-          <input [formControlName]="i" class="form-control mr-2" placeholder="Telefone">
+          <input
+              type="text"
+              class="form-control mr-2"
+              placeholder="Telefone"
+              [formControlName]="i"
+              (input)="applyMask(i)"
+            >
           <button type="button" class="btn btn-danger" (click)="removePhone(i)" *ngIf="phones.length > 1">Remover</button>
         </div>
       </div>

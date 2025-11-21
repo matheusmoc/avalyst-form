@@ -27,7 +27,7 @@
       <td>{{ contact.email }}</td>
       <td>
         <span *ngFor="let phone of contact.phones; let last = last">
-          {{ phone.phone }}<span *ngIf="!last">, </span>
+          {{ formatPhone(phone.phone) }}<span *ngIf="!last">, </span>
         </span>
       </td>
     </tr>

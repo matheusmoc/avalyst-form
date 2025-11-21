@@ -32,9 +32,6 @@ export class ContactCreateComponent implements OnInit {
     this.addPhone();
   }
 
-  get phones(): FormArray {
-    return this.form.get('phones') as FormArray;
-  }
 
   addPhone(): void {
     this.phones.push(new FormControl('', Validators.required));
@@ -44,13 +41,31 @@ export class ContactCreateComponent implements OnInit {
     this.phones.removeAt(index);
   }
 
+  applyMask(index: number): void {
+    const raw = (this.phones.at(index)?.value || '').replace(/\D/g, '');
+    const masked =
+      raw.length > 10 ? raw.replace(/(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3') :
+      raw.length > 6 ? raw.replace(/(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3') :
+      raw.length > 2 ? raw.replace(/(\d{2})(\d{0,5})/, '($1) $2') :
+      raw.length > 0 ? raw.replace(/(\d{0,2})/, '($1') :
+      '';
+    this.phones.at(index)?.setValue(masked, { emitEvent: false });
+  }
+
+
   onSubmit(): void {
 
     this.form.markAllAsTouched();
 
     if (this.form.valid) {
 
-      const contact = this.form.value as Contact;
+      const cleanedPhones = this.phones.controls.map(c => c.value.replace(/\D/g, ''));
+
+      const contact: Contact = {
+        ...this.form.value,
+        phones: cleanedPhones
+      };
+      console.log(cleanedPhones);
 
       this.contactService.create(contact).subscribe(response => {
 
@@ -66,5 +81,7 @@ export class ContactCreateComponent implements OnInit {
 
   get name(): FormControl { return this.form.get('name') as FormControl; }
   get email(): FormControl { return this.form.get('email') as FormControl; }
-
+  get phones(): FormArray {
+    return this.form.get('phones') as FormArray;
+  }
 }

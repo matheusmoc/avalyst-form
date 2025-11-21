@@ -27,4 +27,19 @@ export class ContactListComponent implements OnInit {
     });
   }
 
+  formatPhone(phone: string): string {
+    const raw = phone.replace(/\D/g, '');
+
+    switch (raw.length) {
+      case 11:
+        return raw.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+      case 10:
+        return raw.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+      default:
+        return raw.length > 2
+          ? raw.replace(/(\d{2})(\d{0,5})/, '($1) $2')
+          : raw;
+    }
+  }
+
 }

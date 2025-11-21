@@ -1,0 +1,20 @@
+<h2 class="mb-3">Usuários</h2>
+
+<button routerLink="/usuarios/incluir" class="btn btn-success">incluir</button>
+
+<table class="table my-4">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nome</th>
+      <th scope="col">E-mail</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <th scope="row">{{ user.userId }}</th>
+      <td>{{ user.name }}</td>
+      <td>{{ user.email }}</td>
+    </tr>
+  </tbody>
+</table>

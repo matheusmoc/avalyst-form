@@ -48,6 +48,20 @@ $app->delete('/contact', function (Request $request, Response $response, array $
     return $service->delete($args);
 });
 
+/**
+ * User
+ */
+$app->post('/user', function (Request $request, Response $response, array $args) {
+    $service = $this->get('UserService');
+    $data = $request->getParsedBody();
+    return $service->register($data);
+});
+
+$app->get('/user', function (Request $request, Response $response, array $args) {
+    $service = $this->get('UserService');
+    return $service->list();
+});
+
 
 /**
  * Default

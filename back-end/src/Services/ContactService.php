@@ -18,17 +18,8 @@ class ContactService extends BaseService
                         ->orWhere('email', 'LIKE', "%{$term}%");
                 })
                 ->get()
-                ->each(fn($c) => $this->formatContactPhones($c))
                 ->toArray()
         );
-    }
-        
-    private function formatContactPhones($contact)
-    {
-        if ($contact) {
-            $contact->phones = $contact->phones->pluck('phone');
-        }
-        return $contact;
     }
 
     public function get($id = null)
@@ -40,13 +31,12 @@ class ContactService extends BaseService
                 return $this->error('Not found', 404);
             }
 
-            return $this->ok($this->formatContactPhones($contact)->toArray());
+            return $this->ok($contact->toArray());
         }
 
         return $this->ok(
             Contact::with('phones')
                 ->get()
-                ->each(fn($c) => $this->formatContactPhones($c))
                 ->toArray()
         );
     }

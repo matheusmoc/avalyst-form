@@ -82,7 +82,7 @@ Abaixo estão listadas as alterações e novas funcionalidades implementadas no 
   - **Components**:
     - `ContactListComponent`:
       - Inicialização e carregamento de dados.
-      - Busca reativa (debounce, switchMap) e tratamento de resultados vazios.
+      - Busca reativa e tratamento de resultados vazios.
     - `ContactCreateComponent`:
       - Inicialização do formulário com `FormArray` para telefones.
       - Adição e remoção dinâmica de campos de telefone.

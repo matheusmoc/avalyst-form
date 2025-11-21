@@ -33,3 +33,89 @@ Teste de [back-end (PHP)](back-end) e [front-end (Angular)](front-end).
 - manual do ORM [Eloquent](https://laravel.com/docs/8.x/eloquent);
 - manual do [Respect\Validation](https://respect-validation.readthedocs.io/en/1.1/);
 - ao finalizar enviar o pacote de arquivos para charles@avalyst.com.br.
+
+## Implementações Realizadas
+
+Abaixo estão listadas as alterações e novas funcionalidades implementadas no projeto:
+
+### 1. Suporte a Múltiplos Telefones (Contact)
+- **Backend**:
+  - Criação da tabela `contact_phone` para relacionamento 1:N.
+  - Atualização do `ContactService` para gerenciar a criação e atualização de múltiplos telefones usando transações.
+  - Adaptação do retorno da API para incluir a lista de telefones.
+- **Frontend**:
+  - Formulário de criação (`ContactCreateComponent`) atualizado com `FormArray` para adicionar/remover campos de telefone dinamicamente.
+  - Listagem (`ContactListComponent`) ajustada para exibir múltiplos telefones separados por vírgula.
+  - Tratamento de dados no `ContactService` para converter objetos de telefone em lista de strings para exibição.
+
+### 2. Busca de Contatos (Search)
+- **Backend**:
+  - Implementação do endpoint `POST /contact/search` no `ContactService`.
+  - Filtra contatos por correspondência parcial em `name` ou `email`.
+- **Frontend**:
+  - Implementação de busca reativa no `ContactListComponent`.
+  - Utilização de operadores RxJS (`debounceTime`, `distinctUntilChanged`, `switchMap`) para otimizar as requisições enquanto o usuário digita.
+
+### 3. Módulo de Usuários (User)
+- **Backend**:
+  - Criação da tabela `user` e migração SQL correspondente.
+  - Implementação do `UserService` com métodos `register` (cadastro) e `list` (listagem).
+  - Senhas armazenadas de forma segura utilizando `password_hash`.
+  - O campo `password` é automaticamente ocultado nas respostas JSON da API.
+- **Frontend**:
+  - Criação das telas de Listagem e Cadastro de Usuários.
+  - Validação de formulário (campos obrigatórios, e-mail válido, senha mínima de 6 caracteres).
+  - Adição de rotas e item de menu para navegação.
+
+### 4. Infraestrutura e Correções
+- **Docker**:
+  - Adição de `Dockerfile` e `docker-compose.yml` para facilitar a execução do ambiente (PHP 8.1 + MySQL).
+- **Correções**:
+  - Resolução de problemas de CORS causados por *Deprecated Warnings* do PHP 8.4 interferindo nos headers HTTP.
+  - Ajustes de compatibilidade de dependências no `package.json` do Frontend.
+
+### 5. Testes Automatizados
+- **Frontend (Jasmine/Karma)**:
+  - **Services**:
+    - `ContactService`: Testes de CRUD completo (List, Get, Create, Update) e funcionalidade de Busca (Search).
+    - `UserService`: Testes de Listagem e Criação de usuários.
+  - **Components**:
+    - `ContactListComponent`:
+      - Inicialização e carregamento de dados.
+      - Busca reativa (debounce, switchMap) e tratamento de resultados vazios.
+    - `ContactCreateComponent`:
+      - Inicialização do formulário com `FormArray` para telefones.
+      - Adição e remoção dinâmica de campos de telefone.
+      - Validação de campos obrigatórios e formato de e-mail.
+      - Envio de formulário com sucesso e navegação.
+    - `UserListComponent`:
+      - Inicialização e exibição da lista de usuários.
+    - `UserCreateComponent`:
+      - Validação de formulário (Nome, Email, Senha mínima).
+      - Tratamento de erros de submissão.
+      - Navegação após sucesso.
+
+## Como Rodar com Docker
+
+1. Certifique-se de ter o Docker e Docker Compose instalados.
+2. Na raiz da pasta do backend, execute:
+   ```bash
+   docker-compose up -d --build
+   ```
+3. O Backend estará disponível em `http://localhost:8282`.
+4. O Frontend containerizado ou rodando localmente via `npm start` estará em `http://localhost:4200`.
+
+## Como Rodar os Testes (Frontend)
+
+Para executar os testes unitários do frontend, certifique-se de ter as dependências instaladas e execute o seguinte comando na pasta `front-end`:
+
+```bash
+# Instalar dependências (caso ainda não tenha feito)
+npm install
+
+# Rodar os testes (abre o navegador Chrome)
+ng test
+
+# Rodar os testes em modo Headless (sem interface gráfica, ideal para CI/CD)
+ng test --watch=false --browsers=ChromeHeadless
+```

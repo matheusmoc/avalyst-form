@@ -119,3 +119,17 @@ ng test
 # Rodar os testes em modo Headless (sem interface gráfica, ideal para CI/CD)
 ng test --watch=false --browsers=ChromeHeadless
 ```
+
+<img width="1913" height="972" alt="image" src="https://github.com/user-attachments/assets/4e269c07-f6dd-43d7-9f84-a8ccc53e56b6" />
+<img width="1918" height="943" alt="image" src="https://github.com/user-attachments/assets/58cbd94e-0465-4da1-b9ba-aeebebd5c66f" />
+<img width="1917" height="946" alt="image" src="https://github.com/user-attachments/assets/65c2f82a-84fe-4277-a0c6-4e4232fedef0" />
+<img width="1919" height="933" alt="image" src="https://github.com/user-attachments/assets/c9fc32cb-4d23-4d5d-a448-b50f3550d563" />
+<img width="982" height="474" alt="image" src="https://github.com/user-attachments/assets/b7f837f9-c06c-4733-a130-106552efafb5" />
+<img width="1071" height="283" alt="image" src="https://github.com/user-attachments/assets/85be0c53-eb8d-43df-aa9a-82e0bc44e278" />
+
+
+
+
+
+
+

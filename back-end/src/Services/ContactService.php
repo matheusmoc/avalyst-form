@@ -31,15 +31,24 @@ class ContactService extends BaseService
         return $contact;
     }
 
-    public function get($id)
+    public function get($id = null)
     {
-        $contact = Contact::with('phones')->find($id);
+        if ($id) {
+            $contact = Contact::with('phones')->find($id);
 
-        if (!$contact) {
-            return $this->error('Not found', 404);
+            if (!$contact) {
+                return $this->error('Not found', 404);
+            }
+
+            return $this->ok($this->formatContactPhones($contact)->toArray());
         }
 
-        return $this->ok($this->formatContactPhones($contact)->toArray());
+        return $this->ok(
+            Contact::with('phones')
+                ->get()
+                ->each(fn($c) => $this->formatContactPhones($c))
+                ->toArray()
+        );
     }
 
     public function post($data)

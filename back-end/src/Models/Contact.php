@@ -9,12 +9,7 @@ final class Contact extends BaseModel
 
     protected $fillable = [
         'name', 
-        'email',
-        'phones'
-    ];
-
-    protected $casts = [
-        'phones' => 'array'
+        'email'
     ];
 
     public function phones()

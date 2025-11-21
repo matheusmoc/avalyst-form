@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, switchMap, startWith } from 'rxjs/operators';
 import { Contact } from 'src/app/models/contact';
 import { ContactService } from 'src/app/services/contact.service';
 
@@ -10,17 +12,19 @@ import { ContactService } from 'src/app/services/contact.service';
 export class ContactListComponent implements OnInit {
 
   contacts: Contact[] | undefined = [];
+  searchControl = new FormControl('');
 
   constructor(private contactService: ContactService) { }
 
   ngOnInit(): void {
-
-    this.contactService.list().subscribe(
-      response => {
-        this.contacts = response.data;
-        console.log(JSON.stringify(this.contacts, null, 2));
-      }
-    );
+    this.searchControl.valueChanges.pipe(
+      startWith(''),
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(term => this.contactService.search(term))
+    ).subscribe(response => {
+      this.contacts = response.data || [];
+    });
   }
 
 }

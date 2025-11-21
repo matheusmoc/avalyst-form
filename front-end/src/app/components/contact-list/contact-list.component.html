@@ -1,6 +1,18 @@
 <h2 class="mb-3">Contatos</h2>
 
-<button routerLink="/contatos/incluir" class="btn btn-success">incluir</button>
+<div class="row mb-3">
+  <div class="col-md-6">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Pesquisar por nome ou e-mail" [formControl]="searchControl">
+      <div class="input-group-append">
+        <span class="input-group-text"><i class="fa fa-search"></i></span>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 text-right">
+    <button routerLink="/contatos/incluir" class="btn btn-success">incluir</button>
+  </div>
+</div>
 
 <table class="table my-4">
   <thead>

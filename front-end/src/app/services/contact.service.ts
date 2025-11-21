@@ -33,4 +33,8 @@ export class ContactService {
   update(id: number, model: Contact): Observable<ReturnMessage<Contact>> {
     return this.http.put<ReturnMessage<Contact>>(`${this.apiUrl}/${id}`, model);
   }
+
+  search(term: string): Observable<ReturnMessage<Contact[]>> {
+    return this.http.post<ReturnMessage<Contact[]>>(this.apiUrl + '/search', { query: term });
+  }
 }

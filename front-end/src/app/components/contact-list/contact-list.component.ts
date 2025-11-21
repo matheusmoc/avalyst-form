@@ -15,7 +15,12 @@ export class ContactListComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.contactService.list().subscribe(response => this.contacts = response.data);
+    this.contactService.list().subscribe(
+      response => {
+        this.contacts = response.data;
+        console.log(JSON.stringify(this.contacts, null, 2));
+      }
+    );
   }
 
 }

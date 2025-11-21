@@ -8,6 +8,7 @@
       <th scope="col">#</th>
       <th scope="col">Nome</th>
       <th scope="col">E-mail</th>
+      <th scope="col">Telefones</th>
     </tr>
   </thead>
   <tbody>
@@ -15,6 +16,11 @@
       <th scope="row">{{ contact.contactId }}</th>
       <td>{{ contact.name }}</td>
       <td>{{ contact.email }}</td>
+      <td>
+        <span *ngFor="let phone of contact.phones; let last = last">
+          {{ phone.phone }}<span *ngIf="!last">, </span>
+        </span>
+      </td>
     </tr>
   </tbody>
 </table>

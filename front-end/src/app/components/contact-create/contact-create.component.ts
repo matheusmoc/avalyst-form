@@ -1,4 +1,4 @@
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -23,12 +23,25 @@ export class ContactCreateComponent implements OnInit {
     this.form = new FormGroup({
       name: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
+      phones: new FormArray([])
     });
 
   }
 
   ngOnInit(): void {
+    this.addPhone();
+  }
 
+  get phones(): FormArray {
+    return this.form.get('phones') as FormArray;
+  }
+
+  addPhone(): void {
+    this.phones.push(new FormControl('', Validators.required));
+  }
+
+  removePhone(index: number): void {
+    this.phones.removeAt(index);
   }
 
   onSubmit(): void {
